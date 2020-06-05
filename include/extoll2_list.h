@@ -140,6 +140,7 @@ static inline  extoll_list_head_t* extoll2_list_last(extoll2_list_t* list)
 
 static inline  extoll_list_head_t* extoll2_list_get_next(extoll2_list_t* list,extoll_list_head_t* itemp)
 {
+  (void)list;
   return itemp->next;
 }
 

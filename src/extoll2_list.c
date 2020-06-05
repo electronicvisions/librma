@@ -35,6 +35,8 @@
 #define DEBUG(a)
 
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
 extoll2_list_t* extoll2_construct_list(uint32_t item_size, uint32_t initial_pool_size,uint32_t free_increment,const char* name)
 {
   extoll2_list_t* list=malloc(sizeof(extoll2_list_t));
@@ -57,6 +59,7 @@ extoll2_list_t* extoll2_construct_list(uint32_t item_size, uint32_t initial_pool
   strncpy(list->name,name,32);
   return list;
 }
+#pragma GCC diagnostic pop
 
 void extoll2_destruct_list(extoll2_list_t* list)
 {
@@ -95,6 +98,9 @@ void extoll2_destruct_list(extoll2_list_t* list)
   
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsign-compare"
+#pragma GCC diagnostic ignored "-Wpointer-arith"
 int extoll2_alloc_pool(extoll2_list_t* list,uint32_t num_items)
 {
   int i;
@@ -123,6 +129,7 @@ int extoll2_alloc_pool(extoll2_list_t* list,uint32_t num_items)
   //list->num_free_items+=num_items;
   return 0;
 }
+#pragma GCC diagnostic pop
 
 int extoll2_free_pool(extoll2_pool_item_t * pool)
 {

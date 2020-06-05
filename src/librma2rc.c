@@ -102,9 +102,11 @@ rma2_free_handler(void* address, size_t length)
   } 
   //printf("free handler done\n");
 #endif  
-}  
-  
+}
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpointer-arith"
 RMA2_ERROR rma2_register_cached(RMA2_Port port, void* address, size_t size, RMA2_Region** region)
 {
 #ifndef RMA2CACHED  
@@ -202,7 +204,10 @@ RMA2_ERROR rma2_register_cached(RMA2_Port port, void* address, size_t size, RMA2
    return rma2_err;
 #endif   
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wtype-limits"
 RMA2_ERROR rma2_unregister_cached(RMA2_Port port,RMA2_Region* region)
 {
 #ifndef RMA2CACHED
@@ -235,7 +240,10 @@ RMA2_ERROR rma2_unregister_cached(RMA2_Port port,RMA2_Region* region)
   return rma2_unregister(port, region);  
 #endif  
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
 static void __set_real_munmap_ptr()
 {
     munmap_t munmap_ptr = (munmap_t) dlsym(RTLD_NEXT, "munmap");
@@ -287,6 +295,7 @@ static void __set_real_munmap_ptr()
 
     librma2_minfo.munmap = munmap_ptr;
 }
+#pragma GCC diagnostic pop
 
 int munmap(void *addr, size_t length)
 {
@@ -305,6 +314,8 @@ int munmap(void *addr, size_t length)
   return result;
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
 static void __set_real_free_ptr()
 {
     free_t free_ptr = (free_t) dlsym(RTLD_NEXT, "free");
@@ -359,6 +370,7 @@ static void __set_real_free_ptr()
     librma2_minfo.free = free_ptr;    
     DEBUG(printf("Out free is at %p , libc free is at %p\n",free, free_ptr);)
 }
+#pragma GCC diagnostic pop
 
 
 
@@ -388,6 +400,8 @@ void free(void* ptr)
 char* __extoll2_rma_rc;
 
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-function-type"
 __attribute__((constructor)) void __rma2rc_lib_init(void) {
   int i;
   //printf("librma2 is loaded\n");
@@ -429,6 +443,7 @@ __attribute__((constructor)) void __rma2rc_lib_init(void) {
 
  //printf("malloc is at %p\n",malloc);
 }
+#pragma GCC diagnostic pop
 
 __attribute__ ((destructor)) void __rma2rc_lib_fini(void) {
   if (librma2_minfo.print_stats==1) {

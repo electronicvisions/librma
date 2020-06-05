@@ -102,6 +102,9 @@ const uint32_t RMA2_DEFAULT_FLAG = 0x0;
 const uint32_t RMA2_BLOCK_FLAG = 0x1;
 const uint32_t RMA2_MATCH_LAST_NLA_FLAG = 0x2;
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat"
+#pragma GCC diagnostic ignored "-Wsign-compare"
 void  rma2_read_notiqueue(volatile uint64_t * map, uint32_t len)
 {
   int i;
@@ -115,6 +118,7 @@ void  rma2_read_notiqueue(volatile uint64_t * map, uint32_t len)
            (unsigned long long)map[i]);
   }
 }
+#pragma GCC diagnostic pop
 
 
 
@@ -199,6 +203,8 @@ RMA2_ERROR _rma2_queue_munmap(RMA2_Port port)
   return RMA2_SUCCESS;  
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpointer-arith"
 RMA2_ERROR rma2_open(RMA2_Port* port)
 {
   int i, result;
@@ -302,7 +308,7 @@ RMA2_ERROR rma2_open(RMA2_Port* port)
       fprintf(stderr,"Mmaping of requester page %d failed",0);
       
       return RMA2_ERR_MMAP;
-    }    
+    }
   DEBUG(printf("mapped requester page %d to virtual address %p\n", 0, (*port)->req_pages[0]);)
   for (i=1;i<32;i++)
   {
@@ -339,6 +345,7 @@ RMA2_ERROR rma2_open(RMA2_Port* port)
   DEBUG(printf("Done opening\n");)
   return RMA2_SUCCESS;
 }
+#pragma GCC diagnostic pop
 
 static inline void _rma2_replay_buffer_drain(RMA2_Port port, int send);
 RMA2_ERROR rma2_close(RMA2_Port port)
@@ -393,6 +400,7 @@ RMA2_ERROR rma2_connect(RMA2_Port hport,RMA2_Nodeid  dest_node, RMA2_VPID dest_v
 
 RMA2_ERROR rma2_disconnect(RMA2_Port port, RMA2_Handle handle)
 {
+  (void)handle;
   //send all outstanding messages before disconnecting
   if(port->replay_mode & RMA2_REPLAY_CLOSE) {
     _rma2_replay_buffer_drain(port, 0); 
@@ -896,6 +904,7 @@ RMA2_ERROR __rma2_noti_match_choice(RMA2_Port port, RMA2_Class class, RMA2_Comma
 
 RMA2_ERROR __rma2_noti_lock_match_choice(RMA2_Port port, uint32_t lock,  RMA2_Nodeid nodeid, RMA2_VPID vpid, RMA2_Notification** notification, int block)
 {
+  (void)nodeid;
   int match;
    RMA2_ERROR rc;
 
@@ -1127,7 +1136,8 @@ RMA2_ERROR rma2_noti_free(RMA2_Port port, RMA2_Notification* notification)
   return RMA2_SUCCESS;
 }
 
-
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpointer-arith"
 RMA2_ERROR rma2_register(RMA2_Port port, void* address, size_t size, RMA2_Region** r)
 { //return RMA2_SUCCESS;
 #ifndef ENABLE_REGIONMANAGER
@@ -1181,6 +1191,7 @@ RMA2_ERROR rma2_register(RMA2_Port port, void* address, size_t size, RMA2_Region
   return rma2_map_add_remote(port,address,size,region);  
   #endif
 }
+
 RMA2_ERROR rma2_register_cached(RMA2_Port port, void* address, size_t size, RMA2_Region** r) __attribute__ ((weak, alias ("rma2_register")));
 RMA2_ERROR rma2_register_nomalloc(RMA2_Port port, void* address, size_t size, RMA2_Region* region)
 { //return RMA2_SUCCESS;
@@ -1224,6 +1235,7 @@ RMA2_ERROR rma2_register_nomalloc(RMA2_Port port, void* address, size_t size, RM
   return rma2_map_add_remote(port,address,size,region);  
   #endif
 }
+#pragma GCC diagnostic pop
 
 RMA2_ERROR rma2_unregister(RMA2_Port port, RMA2_Region* region)
 { //return RMA2_SUCCESS;
@@ -1297,6 +1309,8 @@ RMA2_ERROR rma2_get_nla(RMA2_Region* region, size_t offset, RMA2_NLA* nla)
   //#define DEBUG(a) 
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpointer-arith"
 int rma2_get_region_contained(RMA2_Region* region, void* start, size_t size)
 {
    if (region->start <= start && region->end >= start+size)
@@ -1325,16 +1339,17 @@ int rma2_get_region_overlap(RMA2_Region* region, void* start, size_t size)
   else return 0;
 }
 
-int rma2_get_region_equal(RMA2_Region* region, void* start, size_t size)
-{
-  if (region->start == start && region->size == size) return 1;
-  else return 0;
-}
-
 RMA2_ERROR rma2_get_va(RMA2_Region* region, size_t offset, void** va)
 { 
    *va=region->start+offset+region->offset;
    return RMA2_SUCCESS;
+}
+#pragma GCC diagnostic pop
+
+int rma2_get_region_equal(RMA2_Region* region, void* start, size_t size)
+{
+  if (region->start == start && region->size == size) return 1;
+  else return 0;
 }
 
 RMA2_ERROR rma2_get_size(RMA2_Region* region, size_t* size)
