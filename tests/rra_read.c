@@ -44,13 +44,13 @@ void setup_physical_buffer(void)
 {
   int result;
   uint64_t value;
-  
+
   pmap_fd=open("/dev/extoll/pmap",O_RDWR);
   if (pmap_fd<0)
   {
       perror("Opening PMAP device special file:");
       abort();
-  }  
+  }
   //set type to kernel alloced memory
   value=0;
   result=ioctl(pmap_fd, PMAP_IOCTL_SET_TYPE, value);
@@ -65,8 +65,8 @@ void setup_physical_buffer(void)
   if (result<0)
     {
       perror("pmap ioctl PMAP_IOCTL_SET_TYPE failed:");
-      abort(); 
-    }  
+      abort();
+    }
    //mmap the buffer
    buffer=mmap(  0,	/* preferred start */
                  buffer_size,	/* length in bytes */
@@ -79,7 +79,7 @@ void setup_physical_buffer(void)
     {
       perror("Physcial buffer mmap failed");
       abort();
-    }  
+    }
   //get physical address
   value=0;
   result=ioctl(pmap_fd, PMAP_IOCTL_GET_PADDR, &value);
@@ -87,10 +87,10 @@ void setup_physical_buffer(void)
     {
       perror("pmap ioctl PMAP_IOCTL_GET_PADDR failed:");
      abort();
-    }  
+    }
   p_buffer=value;
   printf("mapped physcial buffer of size %lx at virtual address %p, the physical address is %lx\n",
-	 buffer_size, buffer,p_buffer);
+   buffer_size, (void*)buffer,p_buffer);
 }
 
 int main(int argc, char** argv)
@@ -106,8 +106,8 @@ int main(int argc, char** argv)
   uint64_t dest_rra_address;
   uint64_t cmd_type;
   RMA2_Notification* notification;
-  
-  
+
+
   if (argc<4)
   {
     fprintf(stderr,"Erroneous commandline. Must provide 3 parameter: destination node, registerfile address and command type to read from register\n");
@@ -115,22 +115,23 @@ int main(int argc, char** argv)
     abort();
   }
   dest_nodeid=strtol(argv[1],0,0);
-  dest_rra_address=strtol(argv[2],0,0);
+  dest_rra_address=strtoull(argv[2],0,0);
+  _Static_assert(sizeof(unsigned long long) == 8, "unsigned long long is too short!");
   //value=strtol(argv[3],0,0);
   cmd_type=strtol(argv[3],0,0);
   dest_vpid=127;
-  conn_type=  RMA2_CONN_PHYSICAL |  RMA2_CONN_RRA; 
+  conn_type=  RMA2_CONN_PHYSICAL |  RMA2_CONN_RRA;
   printf("Connection to node %d, vpid %d requested. Using connection type of %x.\n", dest_nodeid,dest_vpid, conn_type);
   rc=rma2_open(&port);
   if (rc!=RMA2_SUCCESS)
   {
     fprintf(stderr,"RMA open failed (%d)\n",rc);
     abort();
-  }  
+  }
   nodeid=rma2_get_nodeid(port);
   vpid=rma2_get_vpid(port);
   printf("opened port %d on node %d\n",vpid, nodeid);
-  
+
   rc=rma2_connect(port,dest_nodeid, dest_vpid ,conn_type, &handle);
   if (rc!=RMA2_SUCCESS)
   {
@@ -141,7 +142,7 @@ int main(int argc, char** argv)
   setup_physical_buffer();
   printf("buffer[0]: %lx\n",buffer[0]);
   printf("Accessing register at address 0x%lx on node %d\n",dest_rra_address,dest_nodeid);
-  
+
   //scanf("%d",&dummy);
   //write value into register..
   //buffer[0]=0xffffffffffffffff; //value;
