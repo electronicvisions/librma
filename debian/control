@@ -1,0 +1,11 @@
+Source: librma
+Maintainer: Tobias Groschup <tobias.groschup@extoll.de>
+Priority: optional
+Build-Depends: debhelper(>=9)
+
+Package: librma
+Architecture: amd64
+Depends:
+Description: User space library to use parts of Extoll.
+	Enables user space programs to use the RMA functional unit of the
+	Extoll Network.

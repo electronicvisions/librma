@@ -1,0 +1,56 @@
+
+
+#export EXTOLL_R2_HOME=/extoll2
+
+export EXTOLL_R2_HOME=$(shell pwd)/include 
+#export CAG_SVN=$(shell pwd)/../../..
+
+#echo $CAG_SVN
+
+override ARCH := k1om
+override HOST := $(shell uname -m)
+
+#KCONFIGS = $(default_kconfigs) $(EXTRA_KCONFIGS)
+host_linux := /lib/modules/$(shell uname -r)/build
+mic_linux := $(CURDIR)/../../../../gpl/card/kernel
+mic_linux := $(shell cd $(mic_linux) && pwd)
+cardfs = $(CURDIR)/../../../../gpl/card/rootfs2
+packages = $(CURDIR)/../../../../gpl/package-root
+pkgprefix = $(CURDIR)/../../../../gpl
+
+archroot = linux-$(ARCH)-4.7
+archlibc = $(archroot)/linux-$(ARCH)
+archlgcc = $(archroot)/x86_64-$(ARCH)-linux
+CROSSBASE = /usr
+CROSSPATH = /usr/$(archroot)/bin
+export PATH := $(CROSSPATH):$(PATH)
+
+
+#???
+export CC=$(CROSSPATH)/x86_64-$(ARCH)-linux-gcc
+export AR=$(CROSSPATH)/x86_64-$(ARCH)-linux-ar
+export RANLIB=$(CROSSPATH)/x86_64-$(ARCH)-linux-ranlib
+#???
+
+all: cross-config
+
+
+cross-config:
+	sh admin/bootstrap
+	echo "PASS"
+	echo "MIC Linux: $(mic_linux)"
+	echo "$(ARCH)"
+	./cross-configure \
+	--prefix=/micextoll2 \
+	--libdir=/micextoll2/lib64 \
+	--with-gnu-ld \
+#	--enable-testsuite \
+#	--enable-kernel-tracing \
+#--with-linux="$(mic_linux)" \
+#	--with-system-map=$(mic_linux)/System.map \
+#	--with-kmod-dir=/micextoll2/lib/modules \
+#	--build=x86_64-unknown-linux-gnu #x86_64-pc-linux-gnu \
+#	--host=x86_64-$(ARCH)-linux \
+#	--enable-shared \
+#	--enable-static
+

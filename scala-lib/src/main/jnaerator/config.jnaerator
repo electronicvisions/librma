@@ -1,0 +1,25 @@
+-library rma2
+-I$(EXTOLL_R2_HOME)/include
+-I$(CAG_SVN)/sw/extoll_r2/librma2/include/
+-I$(CAG_SVN)/sw/extoll_r2/extoll2_drv/
+-Isrc/main/native/
+-I../../extoll2_drv/
+-I/usr/include/x86_64-linux-gnu/
+-I/usr/include/linux
+-I/usr/include/x86_64-linux-gnu/linux
+-I/usr/include/x86_64-linux-gnu/c++/4.7
+-I/usr/include/c++/4.7/x86_64-linux-gnu
+-I/usr/include/c++/4.4.4/x86_64-redhat-linux
+-I/usr/lib/gcc/x86_64-redhat-linux/4.4.4/include/
+-I/usr/include/x86_64-redhat-linux
+-I/usr/src/linux-headers-3.2.0-4-common/arch/x86/include/
+-I/usr/src/$(uname -r)/arch/x86/include/
+-runtime BridJ
+-parseChunks
+-v
+-package com.extoll.rma2
+src/main/jnaerator/rma2_region.h
+../include/rma2.h
+
+-library pinnedbuffer
+src/main/native/pinned_buffer.h

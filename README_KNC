@@ -1,0 +1,14 @@
+How to compile the librma2 for KNC:
+1. Because MIC/KNC need a crosscompile, we first have to config configure for the crosscompile. You can do this with the mic_crossconfig script in a easy way:
+   make -f mic_crossconfig
+
+2. Now we can simply use the normal make & make install way. HINT: It is poosible, that there is a doxygen error. If yes, just ignore it.
+   make
+   make install
+
+3. After this you can find unter "/micextoll2" the files you need. 
+
+4. To use the librma2, you have to copy the "micextoll2" folder to MIC/KNC. If You have only one MIC/KNC, you can do this with:
+   scp -r /micextoll2 mic0:/
+
+5. Now you can use the librma2. At the moment there are still some errors.

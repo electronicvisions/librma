@@ -1,0 +1,3 @@
+add_executable(send_recv_example send_recv_example.c)
+target_link_libraries(send_recv_example rma2)
+install(TARGETS send_recv_example DESTINATION bin)

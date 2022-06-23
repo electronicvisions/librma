@@ -1,0 +1,27 @@
+Compilation & Installation of librma2
+
+- you need CMake, version 3.5.1 or higher
+- on centos install cmake3
+  #yum install epel-release
+  #yum install cmake3
+
+- For the documentation to build correctly to may want to install
+  #yum install  graphviz 
+  #yum install doxygen
+  #yum install texlive-*
+
+- make sure some environment variables are set correctly:
+  EXTOLL_R2_INSTALL_DIR - to point to the prefix-dir where the packet should be installed to
+  EXTOLL_R2_HOME - to point to the location of the driver installation
+
+- run in top level dir:
+  # cmake3 ./CMakeLists.txt
+- then
+  # make
+  and
+  # make install
+
+For the documentation to build correctly to may want to install
+- graphviz
+- dot
+- texlive-latex

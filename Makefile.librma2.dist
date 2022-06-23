@@ -1,0 +1,28 @@
+
+
+
+##
+## Extoll librma2:
+## 	- Packages librma2
+##
+
+
+DIST_INSTALL_PACKAGES_DEPS_YUM += texlive-latex
+DIST_INSTALL_PACKAGES_DEPS_APT += texlive-latex-base
+DIST_VERSION := 2.0.0
+include $(ODFI_MBUILD_HOME)/sw/makefile/Makefile.dist
+
+
+
+dist: gen-Makefile
+	@make dist
+
+gen-Makefile:
+	@sh admin/bootstrap
+	@./configure
+
+
+install:
+	@./configure --prefix=$(PREFIX)
+	@make -j8
+	@make install

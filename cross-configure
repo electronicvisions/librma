@@ -1,0 +1,32 @@
+# Automatically-generated file for cross-configuration of BLCR.
+# You will always need to perform at least some manual editing.
+# So, see the file "cross_helper.c" for instructions.
+
+# You always need to set this one manually.
+#TARGET_TYPE=%MISSING%
+TARGET_TYPE=x86_64-k1om-linux
+
+cross_stack_direction=-1
+cross_signum=64
+cross_linuxthreads=0
+
+# ONLY if configuring with --enable-static or --disable-shared, you'll need to
+# set cross_linuxthreads_static on the following line.  The value to use can be
+# taken from the cross_linuxthreads value output by a version of the "cross_helper"
+# compiled with -static.
+# If NOT passing --enable-static or --disable-shared at configure time, this
+# value will be unused and need not be set.
+cross_linuxthreads_static=1
+
+
+extra_conf_args="cross_signum=$cross_signum cross_stack_direction=$cross_stack_direction cross_linuxthreads=$cross_linuxthreads cross_linuxthreads_static=$cross_linuxthreads_static"
+
+srcdir=`dirname $0`
+if test ! -f "$srcdir/configure" ; then
+  echo "The script $0 must be in the same directory as the configure script."
+  exit 1
+fi
+
+echo "PATH is: ${PATH}"
+${srcdir}/configure --host=$TARGET_TYPE --program-prefix='' $extra_conf_args "$@"
+

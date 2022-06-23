@@ -1,0 +1,56 @@
+# RPM SPEC file for librma
+# expects RPM directory structure
+# and in ~/.rpmacros
+# %_topdir %(echo $HOME)/rpmbuild
+# if building in ~/rpmbuild
+#
+Name:           librma
+Version:        2.6.0
+Release:        1%{?dist}
+Summary:        Extolls RMA Userspace Library.
+
+Group:          System Environment/Libraries
+License:        GPL
+URL:            http://www.extoll.de
+# The follwing was pulled from git and built by
+# tar cavf librma-2.6.0.orig.tar.xz *
+# in the git root directory.
+Source0:        librma-2.6.0.orig.tar.xz
+
+BuildRequires: doxygen, doxygen-latex
+#Requires:
+
+%description
+Extoll Userspace Library for RMA communication.
+
+%prep
+%setup -q -c
+admin/bootstrap
+
+
+%build
+export EXTOLL_R2_HOME=/extoll2
+./configure --prefix=/opt/extoll
+
+make %{?_smp_mflags}
+
+
+%install
+export DESTDIR=%{buildroot}
+export prefix=/opt/extoll
+make install
+
+
+%files
+/opt/extoll/lib
+/opt/extoll/bin
+/opt/extoll/include
+%doc /opt/extoll/doc
+
+
+
+#%changelog
+#* Tue Feb 01 2016 Tobias Groschup tobias.groschup@extoll.de
+#- First RPM build.
+#
+

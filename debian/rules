@@ -1,0 +1,10 @@
+#!/usr/bin/make -f
+%:
+	dh $@
+	
+override_dh_auto_configure:
+	admin/bootstrap
+	EXTOLL_R2_HOME=/extoll2/ ./configure --prefix=/opt/extoll/
+
+override_dh_auto_install:
+	$(MAKE) DESTDIR=$$(pwd)/debian/librma prefix=/opt/extoll install
