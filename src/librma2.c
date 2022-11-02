@@ -1241,6 +1241,8 @@ RMA2_ERROR rma2_unregister(RMA2_Port port, RMA2_Region* region)
 { //return RMA2_SUCCESS;
  #ifndef ENABLE_REGIONMANAGER
   int result;
+  assert(port);
+  assert(region);
   result=ioctl(port->fd, RMA2_IOCTL_UNREGISTER_REGION, region);
   if (result<0)
     {

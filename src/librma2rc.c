@@ -83,7 +83,9 @@ rma2_free_handler(void* address, size_t length)
       DEBUG(printf("refcount %ld\n",current->refcount);)
       if (current->refcount==0) //not in use at the moment -> can be safely removed!
         {
-          DEBUG(fprintf(stderr,"%d: unregistered region %d\n",((RMA2_Port)current->endpoint)->vpid,i);)
+		  if (current->endpoint == NULL)
+			  continue; // no endpoint to unregister
+		  DEBUG(fprintf(stderr,"%d: unregistered region %d\n",((RMA2_Port)current->endpoint)->vpid,i);)
           //printf("current->endpoint: %p\n",current);
           rma2_unregister( (RMA2_Port)current->endpoint, current);  //unregister region
           librma2_minfo.region[i]=NULL; //and set cache slot to zero
