@@ -8,13 +8,14 @@
 
 #include <rma2.h>
 
+#include <limits.h>
 #include <stdlib.h>
 #include <stdio.h>
 
 #define LARGE_NUMBER 128
 //128 is now a large number
 
-int main(int argc, char ** argv)
+int main(int /*argc*/, char ** /*argv*/)
 {
   RMA2_Port port;
   RMA2_Handle handle;
@@ -32,8 +33,8 @@ int main(int argc, char ** argv)
   char *send_buffer[LARGE_NUMBER];
   char *recv_buffer[LARGE_NUMBER];
 
-  memset(send_buffer, 1, LARGE_NUMBER);
-  memset(recv_buffer, 0, LARGE_NUMBER);
+  memset(send_buffer, 1, LARGE_NUMBER * CHAR_BIT);
+  memset(recv_buffer, 0, LARGE_NUMBER * CHAR_BIT);
 
   //open the RMA device
   rc = rma2_open(&port);
