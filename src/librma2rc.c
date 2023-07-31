@@ -60,6 +60,10 @@ rma2_free_handler(void* address, size_t length)
 #ifndef RMA2CACHED
   return;
 #else  
+  if (librma2_minfo.region == NULL) {
+    return;
+  }
+
   int i;
   int result;
   RMA2_Region* current;
@@ -472,4 +476,5 @@ __attribute__ ((destructor)) void __rma2rc_lib_fini(void) {
          librma2_minfo.register_uncached);
 	}
   free(librma2_minfo.region);
+  librma2_minfo.region = NULL;
 }
